@@ -1,17 +1,17 @@
 
 import struct
-from unittest import TestCase
+import unittest
 import wave
 
 import oply.opl3
 import oply.utils
 
 
-class TestIMF(TestCase):
+class TestIMF(unittest.TestCase):
 
     def _render(self, imf_path, wav_path, rate=700):
         with open(imf_path, 'rb') as file:
-            imf = oply.utils.IMF(file, rate=rate)
+            imf = oply.utils.IMF(stream=file, rate=rate)
         sequencer = oply.utils.Sequencer(imf.rate)
         imf.to_sequence(sequencer)
         opl3 = oply.opl3.Chip()
@@ -25,8 +25,5 @@ class TestIMF(TestCase):
             for sample in opl3.render(sequencer):
                 wave_stream.writeframesraw(struct.pack('<hh', *sample))
 
-    def test_convert_wolf3d_adlib_38(self):
-        self._render('adlib_38.wlf', 'adlib_38.wav')
-
-    def test_convert_wolf3d_music_14(self):
-        self._render('music_14.wlf', 'music_14.wav')
+    def test_music(self):
+        self._render('tests/Intermission Fuck Yeah.imf', 'tests/Intermission Fuck Yeah.wav')

@@ -25,9 +25,9 @@ class IMF(object):
         def load(cls, stream):
             return cls(*struct.unpack('<BBH', stream.read(4)))
 
-        def store(self, stream):
-            stream.write(struct.pack('<BBH',
-                                     self.address, self.data, self.time))
+        def store(self, stream, previous_time=0):
+            delay = self.time - previous_time
+            stream.write(struct.pack('<BBH', self.address, self.data, delay))
 
     def __init__(self, stream=None, chunk_size=None, rate=560):
         self.rate = rate
@@ -92,6 +92,9 @@ class IMF(object):
             seq_time = sequencer.time + (imf_time * imf_rate) // seq_rate
             sequencer.insert(seq_time, event.address, event.data)
             imf_time += event.time
+
+        seq_time = sequencer.time + (imf_time * imf_rate) // seq_rate
+        sequencer.insert(seq_time, 0, 0)
 
 
 class Sequencer(object):

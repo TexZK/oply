@@ -1,4 +1,7 @@
-from setuptools import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 
 def readme():
@@ -6,23 +9,27 @@ def readme():
         return f.read()
 
 
-setup(name='oply',
-      description='Yamaha OPL emulation',
-      long_description=readme(),
+config = {
+    'name': 'oply',
+    'description': 'Yamaha OPL emulation',
+    'long_description': readme(),
 
-      url='http://github.com/TexZK/oply',
+    'url': 'http://github.com/TexZK/oply',
 
-      version='0.0.1',
-      author='Andrea Zoppi',
-      author_email='texzk@email.it',
-      license='GPL3',
+    'version': '0.0.1',
+    'author': 'Andrea Zoppi',
+    'author_email': 'texzk@email.it',
+    'license': 'GPL3',
 
-      packages=['oply'],
-      install_requires=[],
-      keywords='yamaha opl adlib imf',
+    'packages': ['oply'],
+    'install_requires': [],
+    'keywords': 'yamaha opl adlib imf',
 
-      test_suite='nose.collector',
-      tests_require=['nose'],
+    'test_suite': 'nose.collector',
+    'tests_require': ['nose'],
 
-      include_package_data=True,
-      zip_safe=False)
+    'include_package_data': True,
+    'zip_safe': False,
+}
+
+setup(**config)
